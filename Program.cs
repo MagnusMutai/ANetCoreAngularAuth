@@ -8,16 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie");
 
+builder.Services.AddAuthorization();
+
 var app = builder.BuildWithSpa();
 
 var apiEndpoints = app.MapGroup("/api");
 
 apiEndpoints.MapGet("/user", UserEndpoint.Handler);
 
-apiEndpoints.MapGet("/login", LoginEndpoint.Handler);
+apiEndpoints.MapPost("/login", LoginEndpoint.Handler);
 
-apiEndpoints.MapGet("/register", () => "todo");
-apiEndpoints.MapGet("/logout", () => Results.SignOut(authenticationSchemes: new List<string> {"cookie"}));
+apiEndpoints.MapPost("/register", () => "todo");
+apiEndpoints.MapGet("/logout", LogoutEndpoint.Handler).RequireAuthorization();
 
 app.Run();
 
