@@ -1,25 +1,23 @@
 using System.Security.Claims;
 using ANetCoreAngularAuth;
+using ANetCoreAngularAuth.Endpoints;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-build.Services.AddAuthentication("cookie")
+builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie");
 
 var app = builder.BuildWithSpa();
 
 var apiEndpoints = app.MapGroup("/api");
 
-apiEndpoints.MapGet("/user", (ClaimsPrincipal user) => 
-    user.Claims.ToDictionary(x => x.Type, x => x.Value));
+apiEndpoints.MapGet("/user", UserEndpoint.Handler);
 
-// apiEndpoints.MapGet("/login", (LoginForm LoginForm) =>Results.SignIn (
+apiEndpoints.MapGet("/login", LoginEndpoint.Handler);
 
-// )
-
-//  "Hello World!"{});
-
-apiEndpoints.MapGet("/register", () => "Hello World!");
+apiEndpoints.MapGet("/register", () => "todo");
+apiEndpoints.MapGet("/logout", () => Results.SignOut(authenticationSchemes: new List<string> {"cookie"}));
 
 app.Run();
 
