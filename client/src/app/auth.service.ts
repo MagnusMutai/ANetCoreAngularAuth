@@ -8,7 +8,14 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  loadUser(){}
-  login(){}
-  register(){}
+  loadUser() {
+    const request = this.http.get<any>("/api/user");
+    request.subscribe( user => this.user = user)
+  }
+  login(loginForm: any) {
+    return this.http.post<any>("/api/login", loginForm, { withCredentials: true })
+      .subscribe( _ => { } )
+  }
+  register() { }
+  logout() { }
 }

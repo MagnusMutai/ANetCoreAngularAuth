@@ -5,8 +5,15 @@
         public static WebApplication BuildWithSpa(this WebApplicationBuilder builder)
         {
             var app = builder.Build();
+
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(_ => { });
+
             app.Use((ctx, next) =>
             {
                 if (ctx.Request.Path.StartsWithSegments("/api"))
